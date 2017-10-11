@@ -69,6 +69,7 @@ describe('GET /todos', () => {
 describe('GET /todos/:id', () => {
   it('should return todo doc', (done) => {
     request(app)
+    //object._id ? object._id.toHexString():object.toHexString();
       .get(`/todos/${todos[0]._id.toHexString()}`)
       .expect(200)
       .expect((res) => {
@@ -313,5 +314,30 @@ describe('POST /users/login', () => {
           done();
         }).catch((e) => done(e));
       });
+  });
+});
+
+describe('DELETE /users/me/token', () => {
+  it('should remove auth token on logout', (done) => {
+    // DELETE /users/me/token
+    // Set x-auth equal to token
+    // 200
+    // Find user, verify that token array has length of zero
+
+    request(app)
+      .delete('/users/me/token')
+      .set('x-auth', users[0].token[0].token)
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        user.findById(users[0]._id).then((user) => {
+          expect(user.tokens.length).toBe(0);
+          done();
+        }).catch((e) => done(e));
+      });
+
   });
 });
