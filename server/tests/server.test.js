@@ -69,7 +69,7 @@ describe('GET /todos', () => {
 describe('GET /todos/:id', () => {
   it('should return todo doc', (done) => {
     request(app)
-      .get(`/todos/${todos[0]._id.toString()}`)
+      .get(`/todos/${todos[0]._id.toHexString()}`)
       .expect(200)
       .expect((res) => {
         expect(res.body.todo.text).toBe(todos[0].text);
@@ -79,7 +79,7 @@ describe('GET /todos/:id', () => {
 
   it('should return 404 if todo not found', (done) => {
     // make sure you get 404 back
-    var hexId = new ObjectID().toString();
+    var hexId = new ObjectID().toHexString();
 
     request(app)
       .get(`/todos/${hexId}`)
@@ -98,7 +98,7 @@ describe('GET /todos/:id', () => {
 
 describe('DELETE /todos/:id', () => {
   it('should remove a todo', (done) => {
-    var hexId = todos[0]._id.toString();
+    var hexId = todos[0]._id.toHexString();
 
     request(app)
       .delete(`/todos/${hexId}`)
@@ -123,7 +123,7 @@ describe('DELETE /todos/:id', () => {
   });
 
   it('should return 404 if todo not found', (done) => {
-    var hexId = new ObjectID().toString();
+    var hexId = new ObjectID().toHexString();
 
     request(app)
       .delete(`/todos/${hexId}`)
@@ -146,7 +146,7 @@ describe('PATCH /todos/:id', () => {
     // 200
     // text is changed, completed is true, completedAt is a number .toBeA
 
-    var hexId = todos[0]._id.toString()();
+    var hexId = todos[0]._id.toHexString();
     var text = 'This sould be the new text';
 
     request(app)
@@ -171,7 +171,7 @@ describe('PATCH /todos/:id', () => {
     // 200
     // text is changed, completed false, completedAt is null .toNotExist
 
-    var hexId = todos[1]._id.toString();
+    var hexId = todos[1]._id.toHexString();
     var text = 'This sould be the new text!!';
 
     request(app)
@@ -198,7 +198,7 @@ describe('GET /users/me', () => {
       .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .expect((res) => {
-        expect(res.body._id).toBe(users[0]._id.toString());
+        expect(res.body._id).toBe(users[0]._id.toHexString());
         expect(res.body.email).toBe(users[0].email);
       })
       .end(done);
